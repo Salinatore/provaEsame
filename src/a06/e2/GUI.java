@@ -3,14 +3,17 @@ package a06.e2;
 import javax.swing.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.IntStream;
 import java.awt.*;
-import java.awt.event.*;
 
 public class GUI extends JFrame {
     
-    private final List<JButton> cells = new ArrayList<>();
+    private final List<List<JButton>> cells;
+    private final Model model;
     
     public GUI(int size) {
+        model = new ModelImpl(size);
+
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(100*size, 100*size);
         
@@ -18,26 +21,44 @@ public class GUI extends JFrame {
         JPanel panel = new JPanel(new GridLayout(size,size));
         this.getContentPane().add(main);
         main.add(BorderLayout.CENTER, panel);
-        JButton go = new JButton("Go");
-        main.add(BorderLayout.SOUTH, go);
-        go.addActionListener(e -> System.exit(0));
+        JButton fire = new JButton("Fire");
+        main.add(BorderLayout.SOUTH, fire);
         
-        ActionListener al = new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-        	    var button = (JButton)e.getSource();
-        	    var position = cells.indexOf(button);
-                button.setText(""+position);
+        fire.addActionListener(e -> {
+                if (model.fire()) {
+                    this.updateView();
+                } else {
+                    System.exit(0);
+                }
             }
-        };
-                
+        );
+         
+        cells = new ArrayList<>(size);
         for (int i=0; i<size; i++){
+            List<JButton> jList = new ArrayList<>(size);
+            cells.add(jList);
             for (int j=0; j<size; j++){
                 final JButton jb = new JButton(" ");
-                this.cells.add(jb);
-                jb.addActionListener(al);
                 panel.add(jb);
+                jList.add(jb);
+                jb.setEnabled(false);
             }
         }
+
+        this.updateView();
         this.setVisible(true);
     }    
+
+    private void updateView() {
+        var matrix = model.matrix();
+        matrix.stream().forEach(l -> System.out.println(l));
+        System.out.println();
+        for (List<JButton> list : this.cells) {
+            int x = this.cells.indexOf(list);
+            for (JButton button : list) {
+                int y = this.cells.get(x).indexOf(button);
+                button.setText(Integer.toString(matrix.get(x).get(y)));
+            }
+        }
+    }
 }
