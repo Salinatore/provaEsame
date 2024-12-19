@@ -1,8 +1,6 @@
 package a06.e2;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -27,12 +25,12 @@ public class ModelImpl implements Model {
         var initialList = List.copyOf(this.values);
         this.applySums();
         this.applyGravity();
-        return !initialList.equals(this.values);
+        return !initialList.equals(this.values); 
     }
 
     @Override
     public List<List<Integer>> getAllValues() {
-        return List.copyOf(values);
+        return List.copyOf(this.values);
     }
 
     private void applySums() {
@@ -49,11 +47,13 @@ public class ModelImpl implements Model {
 
     private void applyGravity() {
         this.values = this.values.stream()
-        .map(l -> Stream.concat(
-                Stream.generate(() -> 0).limit(l.stream().filter(i -> i == 0).count()),
-                l.stream().filter(i -> i != 0)   
-                ).collect(Collectors.toCollection(ArrayList::new))
-        ).collect(Collectors.toCollection(ArrayList::new));
+                .map(l -> Stream.concat(
+                        Stream.generate(() -> 0)
+                            .limit(l.stream().filter(i -> i == 0).count()),
+                        l.stream()
+                            .filter(i -> i != 0)   
+                        ).collect(Collectors.toCollection(ArrayList::new))
+                ).collect(Collectors.toCollection(ArrayList::new));
     }
 
 }

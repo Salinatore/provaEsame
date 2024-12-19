@@ -3,7 +3,6 @@ package a06.e2;
 import javax.swing.*;
 import java.util.*;
 import java.util.List;
-import java.util.stream.IntStream;
 import java.awt.*;
 
 public class GUI extends JFrame {
@@ -50,12 +49,12 @@ public class GUI extends JFrame {
     }    
 
     private void updateView() {
-        var matrix = model.getAllValues();
+        var values = model.getAllValues();
         for (List<JButton> list : this.cells) {
             int x = this.cells.indexOf(list);
             for (JButton button : list) {
                 int y = this.cells.get(x).indexOf(button);
-                button.setText(Integer.toString(matrix.get(y).get(x)));
+                button.setText(values.get(y).get(x) != 0 ? Integer.toString(values.get(y).get(x)) : "");
             }
         }
     }
