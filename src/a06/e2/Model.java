@@ -6,6 +6,6 @@ public interface Model {
 
     boolean fire();
 
-    public List<List<Integer>> matrix();
+    public List<List<Integer>> getAllValues();
 
 }

@@ -50,14 +50,12 @@ public class GUI extends JFrame {
     }    
 
     private void updateView() {
-        var matrix = model.matrix();
-        matrix.stream().forEach(l -> System.out.println(l));
-        System.out.println();
+        var matrix = model.getAllValues();
         for (List<JButton> list : this.cells) {
             int x = this.cells.indexOf(list);
             for (JButton button : list) {
                 int y = this.cells.get(x).indexOf(button);
-                button.setText(Integer.toString(matrix.get(x).get(y)));
+                button.setText(Integer.toString(matrix.get(y).get(x)));
             }
         }
     }
