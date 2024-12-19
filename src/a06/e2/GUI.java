@@ -27,7 +27,7 @@ public class GUI extends JFrame {
                 if (model.fire()) {
                     this.updateView();
                 } else {
-                    System.exit(0);
+                    fire.setEnabled(false);
                 }
             }
         );

@@ -22,27 +22,29 @@ public class ModelImpl implements Model {
 
     @Override
     public boolean fire() {
-        var initialList = List.copyOf(this.values);
-        this.applySums();
+        boolean somethingHasChanged = this.applySums();
         this.applyGravity();
-        return !initialList.equals(this.values); 
+        return somethingHasChanged; 
     }
 
-    @Override
+    @Override                          
     public List<List<Integer>> getAllValues() {
         return List.copyOf(this.values);
     }
 
-    private void applySums() {
-        for (var list : values) {
+    private boolean applySums() {
+        boolean somethingHasChanged = false;
+        for (var list : this.values) {
             for (int i = (list.size() - 1); i > 0; i--) {
                 if (list.get(i) != 0 && list.get(i) == list.get(i - 1)) {
                     list.set(i, list.get(i) + list.get(i - 1));
                     list.set(i - 1, 0);
+                    somethingHasChanged = true;
                     break;
                 }
             }
         }
+        return somethingHasChanged;
     }
 
     private void applyGravity() {
@@ -55,5 +57,5 @@ public class ModelImpl implements Model {
                         ).collect(Collectors.toCollection(ArrayList::new))
                 ).collect(Collectors.toCollection(ArrayList::new));
     }
-
+ 
 }
